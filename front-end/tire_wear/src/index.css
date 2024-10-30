@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+body {
+    background-color: #201E1D;
+    color: white;
+    overflow: hidden;
+}
+
+.relative {
+    position: relative;
+  }
+  
+  .backgroundImage {
+    background-image: url("../images/bg.jpg");
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+  }
+  
+  .backgroundImage::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background-color: rgba(10, 7, 7, 0.719);
+    z-index: 1; /* Ensure the overlay is behind other elements */
+  }
+  
+  .text-container {
+    position: relative;
+    z-index: 2; /* Ensure the text is above the overlay */
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  
+  .image-container {
+    animation: fadeIn 1.5s ease-in-out; /* Adjust the duration and easing as needed */
+  }
+  
+  .animated-image {
+    width: 100%;
+    height: auto;
+  }
+  
+  .button-regular {
+    @apply mt-4 border-none bg-indigo-700 p-3 w-[50%] text-xl font-bold uppercase shadow-lg;
+    transition: background-color 0.3s ease; /* Add a transition for background-color */
+  }
+  
+  /* Hover styles for the button */
+  .button-regular:hover {
+    background-color: #4f46e5; /* Change to the desired hover background color */
+  }
