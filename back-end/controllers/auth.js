@@ -13,7 +13,7 @@ const register = async (req, res, next) => {
         if(user) {
             generateToken(res, user._id);
 
-            res.status(201).json({success: true, message: "User created"})
+            res.status(201).json({success: true, message: "Registration complete"})
         } else {
             res.status(400);
             throw new Error('Invalid user data');
@@ -23,4 +23,19 @@ const register = async (req, res, next) => {
     }
 }
 
-module.exports = {register};
+const login = async (req, res, next) => {
+    try {
+        const user = await User.findOne({email: req.body.email});
+        if(user && (await user.matchPassword(req.body.password))) {
+            generateToken(res, user._id);
+            res.status(200).json({success: true, message: "Auth complete"})
+        } else {
+            res.status(400);
+            throw new Error('Invalid email or password');
+        }
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports = {register, login};

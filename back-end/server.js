@@ -23,7 +23,7 @@ app.use(cookieParser());
 // DB connection
 connectDB();
 
-app.use('/api/v1/auth/register', userRoutes)
+app.use('/api/v1/auth', userRoutes)
 
 app.get('/predict', async (req, res) => {
   const modelPath = process.env.MODEL_PATH;
