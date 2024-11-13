@@ -5,12 +5,12 @@ import Results from './components/Results';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Register from './components/Register';
 import Login from './components/Login';
-import Header from './components/Header';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   return (
     <div>
-      <Header />
+      <Toaster position='top-center' reverseOrder={false} />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<HomePage />} />

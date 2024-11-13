@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import tire from '../images/tire2.jpg';
 import tireMaintences from '../images/man.svg';
+import toast from 'react-hot-toast';
 
 const PredictionPage = () => {
   const navigate = useNavigate();
@@ -70,7 +71,7 @@ const PredictionPage = () => {
 
   const handleSubmit = async () => {
     if (!model || !selectedImage) {
-      setError('Model not loaded or image not selected.');
+     toast.success('Model not loaded or image not selected')
       return;
     }
 
@@ -78,12 +79,12 @@ const PredictionPage = () => {
       const imageTensor = await loadImage(selectedImage);
       const predictions = await model.predict(imageTensor).data();
       const value = predictions;
-      console.log(value);
       setPredictionResult(value);
+      toast.success("Prediction success")
       // navigate('/results', { state: { predictionResult } });
     } catch (error) {
       console.error('Prediction error:', error);
-      setError('Error making prediction.');
+      toast.error('Error making prediction.')
     }
   };
 
