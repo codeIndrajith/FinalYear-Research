@@ -71,7 +71,7 @@ const PredictionPage = () => {
 
   const handleSubmit = async () => {
     if (!model || !selectedImage) {
-     toast.success('Model not loaded or image not selected')
+     toast.error('Image not selected')
       return;
     }
 
