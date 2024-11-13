@@ -7,10 +7,10 @@ function Header() {
   return (
     <div className="flex justify-end p-2 bg-black text-white font-bold w-full">
       <div className="flex">
-        <button className="text-lg" onClick={() => navigate('/sign-in')}>Sign In</button>
+        <button className="text-lg" onClick={() => navigate('/login')}>Sign In</button>
       </div>
       <div className="flex mr-3 ml-14">
-        <button className="text-lg" onClick={() => navigate('/sign-up')}>Sign Up</button>
+        <button className="text-lg" onClick={() => navigate('/register')}>Sign Up</button>
       </div>
     </div>
   );
