@@ -20,7 +20,6 @@ const PredictionPage = () => {
 
         const model = await tf.loadGraphModel(response.data.modelPath);
         setModel(model);
-        console.log(model);
       } catch (error) {
         console.log(error.message);
       }
