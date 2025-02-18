@@ -1,22 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import * as tf from '@tensorflow/tfjs';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import tire from '../images/tire2.jpg';
-import tireMaintences from '../images/man.svg';
-import toast from 'react-hot-toast';
+import React, { useEffect, useState } from "react";
+import * as tf from "@tensorflow/tfjs";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import tire from "../images/tire2.jpg";
+import tireMaintences from "../images/man.svg";
+import toast from "react-hot-toast";
+import { ImSpinner8 } from "react-icons/im";
 
 const PredictionPage = () => {
   const navigate = useNavigate();
   const [model, setModel] = useState(null);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [predictionResult, setPredictionResult] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchModel = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/predict');
+        const response = await axios.get("http://localhost:5000/predict");
 
         const model = await tf.loadGraphModel(response.data.modelPath);
         setModel(model);
@@ -29,7 +31,7 @@ const PredictionPage = () => {
 
   useEffect(() => {
     if (predictionResult !== null) {
-      navigate('/results', { state: { predictionResult } });
+      navigate("/results", { state: { predictionResult } });
     }
   }, [predictionResult]);
 
@@ -44,12 +46,12 @@ const PredictionPage = () => {
 
   const loadImage = async (url) => {
     const img = new Image();
-    img.crossOrigin = 'anonymous';
+    img.crossOrigin = "anonymous";
 
     return new Promise((resolve, reject) => {
       img.onload = () => {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
         canvas.width = 150;
         canvas.height = 150;
         ctx.drawImage(img, 0, 0, 150, 150);
@@ -70,20 +72,23 @@ const PredictionPage = () => {
 
   const handleSubmit = async () => {
     if (!model || !selectedImage) {
-     toast.error('Image not selected')
+      toast.error("Image not selected");
       return;
     }
 
     try {
+      setLoading(true);
       const imageTensor = await loadImage(selectedImage);
       const predictions = await model.predict(imageTensor).data();
-      const value = predictions;
-      setPredictionResult(value);
-      toast.success("Prediction success")
+      setTimeout(() => {
+        setPredictionResult(predictions);
+        toast.success("Prediction success");
+      }, 6000);
+
       // navigate('/results', { state: { predictionResult } });
     } catch (error) {
-      console.error('Prediction error:', error);
-      toast.error('Error making prediction.')
+      console.error("Prediction error:", error);
+      toast.error("Error making prediction.");
     }
   };
 
@@ -97,7 +102,7 @@ const PredictionPage = () => {
       </div>
 
       {/* upload image section */}
-      <div className="p-8 w-full h-full flex justify-center items-center mb-12">
+      <div className="p-4 w-full h-full flex justify-center items-center mb-32">
         <div className="flex flex-col justify-center items-center w-full h-[90%] p-3">
           <h2 className="font-semibold text-white uppercase text-4xl">
             Upload Tire Image
@@ -116,14 +121,20 @@ const PredictionPage = () => {
               src={selectedImage}
               alt="Selected"
               className="w-full mt-4 rounded-md"
-              style={{ maxHeight: '200px', maxWidth: '200px' }}
+              style={{ maxHeight: "200px", maxWidth: "200px" }}
             />
           )}
           <button
             onClick={handleSubmit}
-            className="mt-4 border-none bg-indigo-700 p-3 text-xl font-bold uppercase shadow-lg button-regular"
+            className="bg-indigo-700 p-3 text-xl font-bold uppercase shadow-lg button-regular"
           >
-            Predict
+            {loading ? (
+              <span className="text-sm flex gap-4 items-center justify-center">
+                <ImSpinner8 className="animate-spin" /> Predicting...
+              </span>
+            ) : (
+              <span>Predict</span>
+            )}
           </button>
         </div>
       </div>
